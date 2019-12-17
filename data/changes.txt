@@ -1,0 +1,13 @@
+Ruby 2.7.0-preview3 Released
+Posted by naruse on 23 Nov 2019
+
+We are pleased to announce the release of Ruby 2.7.0-preview3.
+
+A preview version is released to gather feedback for the final release planned for December. This preview3 is mainly released to confirm the compatibility of keyword arguments.
+
+It also introduces a number of new features and performance improvements, most notably:
+
+Compaction GC
+Pattern Matching
+REPL improvement
+Separation of positional and keyword arguments
