@@ -29,4 +29,18 @@ class CMSTest < Minitest::Test
     assert_equal "text/plain", last_response["Content-Type"]
     assert_includes last_response.body, "Ruby 0.95 released"
   end
+
+  def test_document_not_found
+    get "/notarealfile.txt"
+
+    assert_equal 302, last_response.status
+
+    get last_response["Location"]
+
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, "notarealfile.txt does not exist"
+
+    get "/"
+    refute_includes last_response.body, "notarealfile.txt does not exist"
+  end
 end
