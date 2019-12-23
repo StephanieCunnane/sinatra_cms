@@ -44,6 +44,25 @@ get "/" do
   erb :index
 end
 
+get "/new" do
+  erb :new
+end
+
+post "/create" do
+  if params[:filename].strip.empty?
+    session[:message] = "A name is required."
+    status 422
+    erb :new
+  else
+    file_path = File.join(data_path, params[:filename])
+
+    File.write(file_path, '')
+    session[:message] = "#{params[:filename]} was created."
+
+    redirect '/'
+  end
+end
+
 get "/:filename" do
   file_path = File.join(data_path, params[:filename])
 
