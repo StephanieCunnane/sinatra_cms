@@ -4,6 +4,8 @@ require "tilt/erubis"
 require "redcarpet"
 require "pry"
 
+require 'yaml'
+
 configure do
   enable :sessions
   set :session_secret, 'super_secret'
@@ -46,13 +48,25 @@ def require_signed_in_user
   end
 end
 
+def load_user_credentials
+  credentials_path = if ENV["RACK_ENV"] == "test"
+		       File.expand_path("../test/users.yml", __FILE__)
+		     else
+		       File.expand_path("../users.yml", __FILE__)
+		     end
+  YAML.load_file(credentials_path)
+end
+
 get "/users/signin" do
   erb :signin
 end
 
 post "/users/signin" do
-  if params[:username] == "admin" && params[:password] == "secret"
-    session[:username] = params[:username]
+  credentials = load_user_credentials
+  username = params[:username]
+
+  if credentials.key?(username) && credentials[username] == params[:password]
+    session[:username] = username
     session[:message] = "Welcome!"
     redirect "/"
   else
